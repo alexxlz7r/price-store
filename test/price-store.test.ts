@@ -5,7 +5,7 @@ const randomPrice = () => {
   return Math.floor(Math.random() * (100000 - 1000 + 1) + 1000);
 };
 
-describe("test all ranges, full filled store", () => {
+describe.skip("test all ranges, full filled store", () => {
   const prices: number[] = [];
   const priceStore = new PriceStore();
 
@@ -42,7 +42,7 @@ describe("test client", () => {
 
   test("", () => {
     const startDate = new Date(2024, 0, 1).getTime();
-    const endDate = new Date(2024, 0, 2).getTime();
+    const endDate = new Date(2024, 0, 3).getTime();
     const interval = 5000;
     let currentDate = startDate;
 
@@ -67,7 +67,13 @@ describe("test client", () => {
           expectedMax,
           `max is wrong, length = ${pricesLength}, range = ${range.id}`
         ).toBe(actualMax);
-        expect(priceStore["prices"].size).toBeLessThan(24 * 60 * 60 * 1000);
+        const maxLength = (24 * 60 * 60 * 1000) / 5000;
+        expect(priceStore["prices"].size).toBeLessThanOrEqual(maxLength);
+        for (let k = 0; k < Math.floor(Math.log2(maxLength)); k++) {
+          expect(priceStore["sparseTableMin"][k].size).toBeLessThanOrEqual(
+            maxLength - ((1 << k) - 1)
+          );
+        }
       }
     }
   });

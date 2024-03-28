@@ -32,6 +32,9 @@ export const defaultRanges: Map<RangeId, Range> = new Map(
 );
 
 /**
+ * PriceStore uses sparse table to query min/max in constant time
+ * Method add has time complexity O(log n)
+ * Memory complexity O(n log n)
  *
  */
 export class PriceStore {
@@ -93,14 +96,18 @@ export class PriceStore {
       }
     }
 
-    const lastKey = timestamp + this.capacity;
+    const lastKey = timestamp - this.capacity;
     if (this.prices.has(lastKey)) {
       this.prices.delete(lastKey);
     }
     [this.sparseTableMin, this.sparseTableMax].forEach((table) => {
-      table.forEach((rowMap) => {
+      table.forEach((rowMap, idx) => {
+        const sparseTableLastKey = lastKey + (1 << idx) * this.interval;
         if (rowMap.has(lastKey)) {
           rowMap.delete(lastKey);
+        }
+        if (rowMap.has(sparseTableLastKey)) {
+          rowMap.delete(sparseTableLastKey);
         }
       });
     });
