@@ -38,12 +38,17 @@ export const defaultRanges: Map<RangeId, Range> = new Map(
  *
  */
 export class PriceStore {
+  // keeps price
   private prices = new Map<number, number>();
+
+  // sparse tables
   private sparseTableMin: Array<Map<number, number>>;
   private sparseTableMax: Array<Map<number, number>>;
 
+  // to fast access to the first item (last added item)
   private zeroIdxTs = 0;
 
+  // max rows in sparse tables
   private readonly maxSparseRows: number;
 
   /**
@@ -72,6 +77,7 @@ export class PriceStore {
     this.prices.set(timestamp, value);
     this.zeroIdxTs = timestamp;
 
+    // fill sparse tables
     for (let r = 0; r < this.maxSparseRows; r++) {
       let minValue1 = 0;
       let minValue2 = 0;
@@ -96,6 +102,7 @@ export class PriceStore {
       }
     }
 
+    // cleanup values that are more then capacity (24h)
     const lastKey = timestamp - this.capacity;
     if (this.prices.has(lastKey)) {
       this.prices.delete(lastKey);
