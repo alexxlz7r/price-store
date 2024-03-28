@@ -67,6 +67,7 @@ describe("test client", () => {
           expectedMax,
           `max is wrong, length = ${pricesLength}, range = ${range.id}`
         ).toBe(actualMax);
+        expect(priceStore["prices"].size).toBeLessThan(24 * 60 * 60 * 1000);
       }
     }
   });
