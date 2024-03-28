@@ -108,8 +108,8 @@ export class PriceStore {
 
   /**
    *
-   * @param range
-   * @returns
+   * @param rangeId 5m | 15m | 1h | 4h | 24h
+   * @returns min value
    */
   public min(rangeId: RangeId): number {
     return this.query(rangeId, this.sparseTableMin, Math.min);
@@ -117,8 +117,8 @@ export class PriceStore {
 
   /**
    *
-   * @param range
-   * @returns
+   * @param rangeId
+   * @returns max value
    */
   public max(rangeId: RangeId): number {
     return this.query(rangeId, this.sparseTableMax, Math.max);
@@ -129,7 +129,7 @@ export class PriceStore {
    * @param rangeId
    * @param sparseTable
    * @param compareFunc
-   * @returns
+   * @returns min/max value depending on sparseTable and compareFunc
    */
   private query(
     rangeId: RangeId,

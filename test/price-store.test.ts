@@ -49,7 +49,7 @@ describe("test client", () => {
     while (currentDate < endDate) {
       const price = randomPrice();
       priceStore.add(currentDate, price);
-      prices.push(price);
+      prices.push(price); // for test purpose, to compare PriceStore with Math.min/max
       currentDate += interval;
 
       for (let range of defaultRanges.values()) {
