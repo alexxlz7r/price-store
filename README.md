@@ -1,5 +1,3 @@
-# Vitest Demo
+# Price Store
 
-Run `npm test` and change a test or source code to see HMR in action!
-
-Learn more at https://vitest.dev
+Store values and allow queries min/max values for constant time
